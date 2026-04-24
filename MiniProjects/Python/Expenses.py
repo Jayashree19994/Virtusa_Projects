@@ -9,13 +9,23 @@ def add():
     if not date:
         date = datetime.today().strftime('%Y-%m-%d')
 
+    # CATEGORY validation (only letters allowed)
     cat = input("Category: ")
-    amt = float(input("Amount: "))
+    if not cat.isalpha():
+        print("Category must contain only letters!")
+        return
+
+    # AMOUNT validation (must be number)
+    try:
+        amt = float(input("Amount: "))
+    except ValueError:
+        print("Amount must be a number!")
+        return
 
     with open(FILE, "a", newline="") as f:
         csv.writer(f).writerow([date, cat, amt])
 
-    print("Added")
+    print("Added successfully!")
 
 def summary():
     month = input("Month (YYYY-MM): ")
@@ -36,7 +46,9 @@ def summary():
 
     if data:
         plt.pie(data.values(), labels=data.keys(), autopct='%1.1f%%')
-        plt.show()
+        plt.show(block=False)
+        plt.pause(10)
+        plt.close()
 
 while True:
     print("\n1.Add  2.Summary  3.Exit")
